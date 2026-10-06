@@ -40,6 +40,10 @@ def main():
             running = False
 
         pygame.display.flip()
+
+        if engine.game_over:
+            pygame.time.delay(2000)
+
         clock.tick(60)
 
     pygame.quit()

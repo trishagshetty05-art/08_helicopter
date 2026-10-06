@@ -27,6 +27,7 @@ class GameEngine:
         self.obstacles = []
         self.frames_until_spawn = 0
         self.game_over = False
+        self.distance = 0.0
 
     def _spawn_obstacle(self):
         margin = 60
@@ -58,6 +59,8 @@ class GameEngine:
 
         self.helicopter.update(HEIGHT)
 
+        self.distance += SCROLL_SPEED
+
         self.frames_until_spawn -= 1
         if self.frames_until_spawn <= 0:
             self._spawn_obstacle()
@@ -87,4 +90,7 @@ class GameEngine:
             surface,
             self.helicopter,
             self.obstacles,
+            self.distance,
+            self.game_over,
+            font,
         )
