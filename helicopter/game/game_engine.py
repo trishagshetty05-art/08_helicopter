@@ -28,6 +28,7 @@ class GameEngine:
         self.frames_until_spawn = 0
         self.game_over = False
         self.distance = 0.0
+        self.shield_active = False
 
     def _spawn_obstacle(self):
         margin = 60
@@ -51,7 +52,8 @@ class GameEngine:
         self.helicopter.handle_input(keys_pressed)
 
     def handle_keydown(self, key):
-        pass
+        if key == ord("s") and not self.game_over:
+            self.shield_active = True
 
     def update(self):
         if self.game_over:
@@ -69,17 +71,28 @@ class GameEngine:
         for obstacle in self.obstacles:
             obstacle.update()
 
-            helicopter_rect = self.helicopter.get_rect()
+        helicopter_rect = self.helicopter.get_rect()
+        remaining_obstacles = []
 
-            if helicopter_rect.colliderect(obstacle.get_top_rect()):
-                self.game_over = True
+        for obstacle in self.obstacles:
+            collision = (
+                helicopter_rect.colliderect(obstacle.get_top_rect())
+                or helicopter_rect.colliderect(obstacle.get_bottom_rect())
+            )
 
-            if helicopter_rect.colliderect(obstacle.get_bottom_rect()):
-                self.game_over = True
+            if collision:
+                if self.shield_active:
+                    # Shield absorbs exactly one collision.
+                    self.shield_active = False
+                    continue
+                else:
+                    self.game_over = True
+
+            remaining_obstacles.append(obstacle)
 
         self.obstacles = [
             obstacle
-            for obstacle in self.obstacles
+            for obstacle in remaining_obstacles
             if not obstacle.is_off_screen()
         ]
 
@@ -92,5 +105,6 @@ class GameEngine:
             self.obstacles,
             self.distance,
             self.game_over,
+            self.shield_active,
             font,
         )

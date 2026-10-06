@@ -12,9 +12,18 @@ COLOR_BG = (140, 200, 230)
 COLOR_HELI = (60, 60, 70)
 COLOR_OBSTACLE = (70, 150, 80)
 COLOR_TEXT = (20, 20, 20)
+COLOR_SHIELD = (50, 150, 255)
 
 
-def draw_scene(surface, helicopter, obstacles, distance, game_over, font):
+def draw_scene(
+    surface,
+    helicopter,
+    obstacles,
+    distance,
+    game_over,
+    shield_active,
+    font,
+):
     surface.fill(COLOR_BG)
 
     for obstacle in obstacles:
@@ -23,10 +32,21 @@ def draw_scene(surface, helicopter, obstacles, distance, game_over, font):
             COLOR_OBSTACLE,
             obstacle.get_top_rect(),
         )
+
         pygame.draw.rect(
             surface,
             COLOR_OBSTACLE,
             obstacle.get_bottom_rect(),
+        )
+
+    # Draw shield behind the helicopter when active.
+    if shield_active:
+        pygame.draw.circle(
+            surface,
+            COLOR_SHIELD,
+            helicopter.get_rect().center,
+            max(helicopter.get_rect().width, helicopter.get_rect().height),
+            4,
         )
 
     pygame.draw.rect(
@@ -42,6 +62,15 @@ def draw_scene(surface, helicopter, obstacles, distance, game_over, font):
         f"Distance: {int(distance)}",
         (20, 20),
     )
+
+    if shield_active:
+        draw_text(
+            surface,
+            font,
+            "SHIELD ACTIVE",
+            (20, 50),
+            COLOR_SHIELD,
+        )
 
     if game_over:
         draw_banner(

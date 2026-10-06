@@ -1,9 +1,10 @@
 """
 Helicopter Game (Lab Starter)
 
-Run with: python3 main.py
+Run with: python main.py
 
 Controls: Up/Down arrows to move.
+          S = activate shield.
 """
 
 import pygame
@@ -28,10 +29,12 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+
             elif event.type == pygame.KEYDOWN:
                 engine.handle_keydown(event.key)
 
         keys = pygame.key.get_pressed()
+
         engine.handle_input(keys)
         engine.update()
         engine.draw(screen, font)
