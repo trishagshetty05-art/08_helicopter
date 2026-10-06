@@ -1,7 +1,7 @@
 """
 Helicopter Game (Lab Starter)
 
-Run with:  python3 main.py
+Run with: python3 main.py
 
 Controls: Up/Down arrows to move.
 """
@@ -14,13 +14,16 @@ from game.renderer import WINDOW_SIZE
 
 def main():
     pygame.init()
+
     screen = pygame.display.set_mode(WINDOW_SIZE)
     pygame.display.set_caption("Helicopter")
+
     clock = pygame.time.Clock()
     font = pygame.font.SysFont("consolas", 22)
 
     engine = GameEngine()
     running = True
+
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -32,6 +35,9 @@ def main():
         engine.handle_input(keys)
         engine.update()
         engine.draw(screen, font)
+
+        if engine.game_over:
+            running = False
 
         pygame.display.flip()
         clock.tick(60)
